@@ -64,7 +64,7 @@ void terminal_initialize(void)
 {
   terminal_row = 0;
   terminal_column = 0;
-  terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+  terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
 
   for (size_t y = 0; y < VGA_HEIGHT; y++) {
     for (size_t x = 0; x < VGA_WIDTH; x++) {
@@ -79,6 +79,20 @@ void terminal_set_color(uint8_t color)
   terminal_color = color;
 }
 
+void terminal_scroll(void) 
+{
+  for (size_t y = 1; y < VGA_HEIGHT; y++) {
+    for (size_t x = 0; x < VGA_WIDTH; x++) {
+      /* copy each line to the line above */
+      terminal_buffer[(y-1) * VGA_WIDTH + x] = terminal_buffer[y * VGA_WIDTH + x];
+    }
+  }
+  for (size_t x = 0; x < VGA_WIDTH; x++) {
+    /* set the last line to zero */ 
+    terminal_buffer[(VGA_HEIGHT-1) * VGA_WIDTH + x] = vga_entry(' ', terminal_color);
+  }
+}
+
 void terminal_put_entry_at(char c, uint8_t color, size_t x , size_t y) 
 {
   const size_t index = y * VGA_WIDTH + x;
@@ -87,11 +101,26 @@ void terminal_put_entry_at(char c, uint8_t color, size_t x , size_t y)
 
 void terminal_put_char(char c) 
 {
-  terminal_put_entry_at(c, terminal_color, terminal_column, terminal_row);
-  if (++terminal_column == VGA_WIDTH) {
+  if (c == '\n') {
     terminal_column = 0;
-    if (++terminal_row == VGA_HEIGHT) {
-      terminal_row = 0;
+
+    terminal_row++;
+    if (terminal_row == VGA_HEIGHT) {
+      terminal_scroll();
+      terminal_row = VGA_HEIGHT-1;
+    }
+    return;
+  } 
+  terminal_put_entry_at(c, terminal_color, terminal_column, terminal_row);
+  
+  terminal_column++;
+  if (terminal_column == VGA_WIDTH) {
+    terminal_column = 0;
+    
+    terminal_row++;
+    if (terminal_row == VGA_HEIGHT) {
+      terminal_scroll();
+      terminal_row = VGA_HEIGHT-1;
     }
   }
 }
@@ -113,7 +142,8 @@ void kernel_main(void)
   /* Initialize terminal interface */
   terminal_initialize();
   
-  terminal_write_string("Hello, bro teams!\n");
+  for(int i = 0; i < 15; i++) 
+    terminal_write_string("Hello, bro teams!\n");
 }
 
 
