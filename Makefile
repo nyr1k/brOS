@@ -1,4 +1,5 @@
-CC = i686-elf-gcc
+PREFIX = $(HOME)/opt/cross/bin
+CC = $(PREFIX)/i686-elf-gcc
 AS = nasm 
 CFLAGS = -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 LDFLAGS = -T linker.ld -ffreestanding -O2 -nostdlib -lgcc
