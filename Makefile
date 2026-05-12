@@ -25,7 +25,7 @@ $(TARGET_BIN): $(OBJ)
 
 $(BUILD_DIR)/boot.o: $(ARCH_I386)/boot.asm
 	@mkdir -p $(dir $@)
-	$(AS) -felf32 src/boot/boot.asm -o $@
+	$(AS) -felf32 $(ARCH_I386)/boot.asm -o $@
 
 $(BUILD_DIR)/kernel.o: kernel/kernel/kernel.c 
 	@mkdir -p $(dir $@) 

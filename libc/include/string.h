@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-size_t strlen(cosnt char* str);
+size_t strlen(const char* str);
 
 #ifdef __cplusplus
 }

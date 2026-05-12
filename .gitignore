@@ -1,5 +1,1 @@
-brOS
-brOS.iso
-kernel/kernel.o
-kernel/boot/boot.o
-isodir
+build
