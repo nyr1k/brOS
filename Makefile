@@ -10,7 +10,8 @@ ARCH_I386 = kernel/arch/i386
 OBJ = $(BUILD_DIR)/boot.o \
 	$(BUILD_DIR)/kernel.o \
 	$(BUILD_DIR)/tty.o \
-	$(BUILD_DIR)/libc/string.o 
+	$(BUILD_DIR)/libc/string.o \
+	$(BUILD_DIR)/libc/putchar.o
 
 all: $(TARGET_ISO)
   
@@ -38,6 +39,10 @@ $(BUILD_DIR)/tty.o: $(ARCH_I386)/tty.c
 $(BUILD_DIR)/libc/string.o: libc/string/string.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c libc/string/string.c -o $@
+
+$(BUILD_DIR)/libc/putchar.o: libc/stdio/putchar.c 
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c libc/stdio/putchar.c -o $@ 
 
 run: $(TARGET_ISO)
 	qemu-system-i386 -cdrom $(TARGET_ISO)
