@@ -11,7 +11,8 @@ OBJ = $(BUILD_DIR)/boot.o \
 	$(BUILD_DIR)/kernel.o \
 	$(BUILD_DIR)/tty.o \
 	$(BUILD_DIR)/libc/string.o \
-	$(BUILD_DIR)/libc/putchar.o
+	$(BUILD_DIR)/libc/putchar.o \
+	$(BUILD_DIR)/libc/puts.o 
 
 all: $(TARGET_ISO)
   
@@ -43,6 +44,10 @@ $(BUILD_DIR)/libc/string.o: libc/string/string.c
 $(BUILD_DIR)/libc/putchar.o: libc/stdio/putchar.c 
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c libc/stdio/putchar.c -o $@ 
+
+$(BUILD_DIR)/libc/puts.o: libc/stdio/puts.c 
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c libc/stdio/puts.c -o $@
 
 run: $(TARGET_ISO)
 	qemu-system-i386 -cdrom $(TARGET_ISO)
