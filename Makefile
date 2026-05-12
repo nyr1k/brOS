@@ -1,7 +1,7 @@
 PREFIX = $(HOME)/opt/cross/bin
 CC = $(PREFIX)/i686-elf-gcc
 AS = nasm 
-CFLAGS = -std=gnu99 -ffreestanding -Ikernel/include -Ilibc/include -O2 -Wall -Wextra
+CFLAGS = -std=gnu99 -D__is_libk -ffreestanding -Ikernel/include -Ilibc/include -O2 -Wall -Wextra
 LDFLAGS = -T linker.ld -ffreestanding -O2 -nostdlib -lgcc
 BUILD_DIR = build
 TARGET_ISO = $(BUILD_DIR)/brOS.iso
