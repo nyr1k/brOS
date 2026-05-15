@@ -8,6 +8,7 @@ TARGET_ISO = $(BUILD_DIR)/brOS.iso
 TARGET_BIN = $(BUILD_DIR)/brOS 
 ARCH_I386 = kernel/arch/i386
 OBJ = $(BUILD_DIR)/boot.o \
+	$(BUILD_DIR)/load_gdt.o \
 	$(BUILD_DIR)/kernel.o \
 	$(BUILD_DIR)/tty.o \
 	$(BUILD_DIR)/libc/string.o \
@@ -32,6 +33,10 @@ $(TARGET_BIN): $(OBJ)
 $(BUILD_DIR)/boot.o: $(ARCH_I386)/boot.asm
 	@mkdir -p $(dir $@)
 	$(AS) -felf32 $(ARCH_I386)/boot.asm -o $@
+
+$(BUILD_DIR)/load_gdt.o: $(ARCH_I386)/load_gdt.asm
+	@mkdir -p $(dir $@)
+	$(AS) -felf32 $(ARCH_I386)/load_gdt.asm -o $@ 
 
 $(BUILD_DIR)/kernel.o: kernel/kernel/kernel.c 
 	@mkdir -p $(dir $@) 
@@ -68,6 +73,10 @@ $(BUILD_DIR)/libc/memcpy.o: libc/string/memcpy.c
 $(BUILD_DIR)/gdt.o: kernel/arch/i386/gdt.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c kernel/arch/i386/gdt.c -o $@
+
+debug: $(TARGET_ISO) 
+	$(CFLAGS) += -g
+	qemu-system-i386 -s -S -cdrom $(TARGET_ISO)
 
 run: $(TARGET_ISO)
 	qemu-system-i386 -cdrom $(TARGET_ISO)
