@@ -93,7 +93,7 @@ For some reason my cross-compiler couldn't find <stdint.h>. So, if you have enco
 
 stdint.h: 
 
-```bash
+```C
 #ifndef _STDINT_H
 #define _STDINT_H
 
