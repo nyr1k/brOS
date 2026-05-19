@@ -3,7 +3,7 @@
 A hobby x86 operating system kernel written in C and x86 NASM assembly for educational purposes and low-level systems programming practice.
 
 ## Goals
-The reason I started this project is to solidify the knowledge gained during the OS course I took this semester. 
+The reason I started this project was to solidify the knowledge gained during the OS course I took this semester. 
 
 The main goals of this project are:
 
@@ -74,7 +74,7 @@ First that you will need is the cross-compiler. I followed this guide on the OSd
 In order to build the cross-compiler, I installed binutils (2.46.0) source code from https://ftp.gnu.org/gnu/binutils/, and the source for the gcc (16.1.0) from https://ftp.gnu.org/gnu/gcc/ 
 
 ### GRUB and Qemu 
-I use GRUB2 for booting. You can install it using the following command:
+I used GRUB2 for booting. You can install it using the following command:
 ```bash
 sudo dnf install shim-* grub2-efi-* grub2-common 
 ```
