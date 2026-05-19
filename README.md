@@ -83,7 +83,7 @@ You will also need QEMU to test the kernel. You can install it using the followi
 sudo dnf install qemu-system-x86 
 ```
 ### Running the kernel
-Now you can start the kernel in qemu by running the following commands in the root directory: 
+Now you can start the kernel in qemu by running the following commands in the root directory of the project: 
 ```bash
 make
 make run
