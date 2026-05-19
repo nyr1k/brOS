@@ -9,6 +9,8 @@ TARGET_BIN = $(BUILD_DIR)/brOS
 ARCH_I386 = kernel/arch/i386
 OBJ = $(BUILD_DIR)/boot.o \
 	$(BUILD_DIR)/load_gdt.o \
+	$(BUILD_DIR)/load_idt.o \
+	$(BUILD_DIR)/isr.o \
 	$(BUILD_DIR)/kernel.o \
 	$(BUILD_DIR)/tty.o \
 	$(BUILD_DIR)/libc/string.o \
@@ -17,7 +19,8 @@ OBJ = $(BUILD_DIR)/boot.o \
 	$(BUILD_DIR)/libc/printf.o \
 	$(BUILD_DIR)/libc/memset.o \
 	$(BUILD_DIR)/libc/memcpy.o \
-	$(BUILD_DIR)/gdt.o
+	$(BUILD_DIR)/gdt.o \
+	$(BUILD_DIR)/idt.o 
 
 all: $(TARGET_ISO)
   
@@ -37,6 +40,13 @@ $(BUILD_DIR)/boot.o: $(ARCH_I386)/boot.asm
 $(BUILD_DIR)/load_gdt.o: $(ARCH_I386)/load_gdt.asm
 	@mkdir -p $(dir $@)
 	$(AS) -felf32 $(ARCH_I386)/load_gdt.asm -o $@ 
+
+$(BUILD_DIR)/load_idt.o: $(ARCH_I386)/load_idt.asm
+	$(AS) -felf32 $(ARCH_I386)/load_idt.asm -o $@
+
+$(BUILD_DIR)/isr.o: $(ARCH_I386)/isr.asm
+	@mkdir -p $(dir $@)
+	$(AS) -felf32 $(ARCH_I386)/isr.asm -o $@
 
 $(BUILD_DIR)/kernel.o: kernel/kernel/kernel.c 
 	@mkdir -p $(dir $@) 
@@ -73,6 +83,10 @@ $(BUILD_DIR)/libc/memcpy.o: libc/string/memcpy.c
 $(BUILD_DIR)/gdt.o: kernel/arch/i386/gdt.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c kernel/arch/i386/gdt.c -o $@
+
+$(BUILD_DIR)/idt.o: kernel/arch/i386/idt.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c kernel/arch/i386/idt.c -o $@
 
 debug: $(TARGET_ISO) 
 	$(CFLAGS) += -g
