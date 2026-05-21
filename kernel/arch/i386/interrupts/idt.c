@@ -55,7 +55,7 @@ typedef struct __attribute__((packed)) idt_ptr {
 static idt_entry_t idt[256];
 static idt_ptr_t idtr;
 
-void set_idt_gate(uint8_t index, uint32_t offset, uint16_t selector, uint8_t attributes)  
+static void set_idt_gate(uint8_t index, uint32_t offset, uint16_t selector, uint8_t attributes)  
 {
   idt[index].offset_low = offset & 0xFFFF;
   idt[index].selector = selector;
