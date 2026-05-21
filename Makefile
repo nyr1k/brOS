@@ -10,7 +10,7 @@ ARCH_I386 = kernel/arch/i386
 OBJ = $(BUILD_DIR)/boot.o \
 	$(BUILD_DIR)/load_gdt.o \
 	$(BUILD_DIR)/load_idt.o \
-	$(BUILD_DIR)/isr.o \
+	$(BUILD_DIR)/isr_stubs.o \
 	$(BUILD_DIR)/kernel.o \
 	$(BUILD_DIR)/tty.o \
 	$(BUILD_DIR)/libc/string.o \
@@ -20,7 +20,8 @@ OBJ = $(BUILD_DIR)/boot.o \
 	$(BUILD_DIR)/libc/memset.o \
 	$(BUILD_DIR)/libc/memcpy.o \
 	$(BUILD_DIR)/gdt.o \
-	$(BUILD_DIR)/idt.o 
+	$(BUILD_DIR)/idt.o \
+	$(BUILD_DIR)/isr.o 
 
 all: $(TARGET_ISO)
   
@@ -44,9 +45,9 @@ $(BUILD_DIR)/load_gdt.o: $(ARCH_I386)/memory/load_gdt.asm
 $(BUILD_DIR)/load_idt.o: $(ARCH_I386)/interrupts/load_idt.asm
 	$(AS) -felf32 $(ARCH_I386)/interrupts/load_idt.asm -o $@
 
-$(BUILD_DIR)/isr.o: $(ARCH_I386)/interrupts/isr.asm
+$(BUILD_DIR)/isr_stubs.o: $(ARCH_I386)/interrupts/isr_stubs.asm
 	@mkdir -p $(dir $@)
-	$(AS) -felf32 $(ARCH_I386)/interrupts/isr.asm -o $@
+	$(AS) -felf32 $(ARCH_I386)/interrupts/isr_stubs.asm -o $@
 
 $(BUILD_DIR)/kernel.o: kernel/kernel/kernel.c 
 	@mkdir -p $(dir $@) 
@@ -88,9 +89,9 @@ $(BUILD_DIR)/idt.o: $(ARCH_I386)/interrupts/idt.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $(ARCH_I386)/interrupts/idt.c -o $@
 
-debug: $(TARGET_ISO) 
-	$(CFLAGS) += -g
-	qemu-system-i386 -s -S -cdrom $(TARGET_ISO)
+$(BUILD_DIR)/isr.o: $(ARCH_I386)/interrupts/isr.c 
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $(ARCH_I386)/interrupts/isr.c -o $@
 
 run: $(TARGET_ISO)
 	qemu-system-i386 -cdrom $(TARGET_ISO)
