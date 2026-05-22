@@ -96,5 +96,8 @@ $(BUILD_DIR)/isr.o: $(ARCH_I386)/interrupts/isr.c
 run: $(TARGET_ISO)
 	qemu-system-i386 -cdrom $(TARGET_ISO)
 
+debug: $(TARGET_ISO) 
+	qemu-system-i386 -s -S -cdrom $(TARGET_ISO) 
+
 clean:
 	rm -rf $(BUILD_DIR)
