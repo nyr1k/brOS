@@ -3,5 +3,5 @@
 
 void isr_handle(isr_state_t* isr_frame)
 {
-    printf("Problem!\nInterrupt index: %d\nIndex node: %d\n", isr_frame->interrupt_index, isr_frame->error_code);
+    printf("Interrupt!\nHalt the execution\nInterrupt index: %x\nIndex node: %x\n", isr_frame->interrupt_index, isr_frame->error_code);
 }
